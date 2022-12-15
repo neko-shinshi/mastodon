@@ -3951,7 +3951,7 @@
         "id": "confirmations.discard_edit_media.confirm"
       },
       {
-        "defaultMessage": "Describe for people who are hard of hearing",
+        "defaultMessage": "Describe for people who are deaf or hard of hearing",
         "id": "upload_form.audio_description"
       },
       {
