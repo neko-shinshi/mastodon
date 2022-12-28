@@ -254,7 +254,7 @@ class Status extends ImmutablePureComponent {
     if (collapse ||
       autoCollapseSettings.get('all') ||
       (autoCollapseSettings.get('notifications') && muted) ||
-      (autoCollapseSettings.get('lengthy') && node.clientHeight > ((status.get('media_attachments').size && !muted) ? 650 : 400)) ||
+      (autoCollapseSettings.get('lengthy') && node.clientHeight > ((status.get('media_attachments').size && !muted) ? 800 : 500)) ||
       (autoCollapseSettings.get('reblogs') && prepend === 'reblogged_by') ||
       (autoCollapseSettings.get('replies') && status.get('in_reply_to_id', null) !== null) ||
       (autoCollapseSettings.get('media') && !(status.get('spoiler_text').length) && status.get('media_attachments').size > 0)
