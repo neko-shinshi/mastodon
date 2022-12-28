@@ -58,6 +58,8 @@ class LinkFooter extends React.PureComponent {
           <strong>{domain}</strong>:
           {' '}
           <Link key='about' to='/about'><FormattedMessage id='footer.about' defaultMessage='About' /></Link>
+          {' . '}
+          <Link key='status' to='https://status.ursuai.social/status/urusai'><FormattedMessage id='footer.status' defaultMessage='Status' /></Link>
           {canInvite && (
             <>
               {' · '}
