@@ -319,6 +319,7 @@ class Status < ApplicationRecord
   before_validation :set_visibility
   before_validation :set_conversation
   before_validation :set_local
+  before_create :set_locality
 
   around_create Mastodon::Snowflake::Callbacks
 
