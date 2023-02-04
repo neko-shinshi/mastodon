@@ -109,7 +109,7 @@ export default class LocalSettingsPageItem extends React.PureComponent {
             onChange={handleChange}
             disabled={!enabled}
             {...inputProps}
-	    />
+          />
           {children}
         </label>
       </div>
