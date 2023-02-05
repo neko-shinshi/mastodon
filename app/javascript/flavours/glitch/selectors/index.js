@@ -107,9 +107,12 @@ export const getAlerts = createSelector([getAlertsBase], (base) => {
 
 export const makeGetNotification = () => createSelector([
   (_, base)             => base,
-  (state, _, accountId) => {
-    const accts = ImmutableList(state.get('accounts').filter((_, k) => k === accountId || accountId.includes(k)).values());
-    return accts.size === 1 ? accts.get(0) : accts;
+  (state, _, accountIds) => {
+    if (accountIds.size > 1) {
+      return ImmutableList(accountIds.map(each => state.getIn(['accounts', each])));
+    } else {
+      return state.getIn(['accounts', accountIds.get(0)]);
+    }
   },
 ], (base, account) => base.set('account', account));
 
