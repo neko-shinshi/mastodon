@@ -24,15 +24,27 @@ export default class StatusPrepend extends React.PureComponent {
 
   Message = () => {
     const { type, accounts, status } = this.props;
-    let link = (
+
+    let viewMoreHref = status.get('url');
+    switch (type) {
+    case 'reblog':
+      viewMoreHref += '/reblogs';
+      break;
+    case 'favourite':
+      viewMoreHref += '/favourites';
+      break;
+    }
+
+    let linkifiedAccounts = (
       <span>
         <NameList
           accounts={accounts}
-          viewMoreHref={status.get('url')}
+          viewMoreHref={viewMoreHref}
           onAccountClick={this.handleClick}
         />
       </span>
     );
+
     switch (type) {
     case 'featured':
       return (
@@ -43,7 +55,7 @@ export default class StatusPrepend extends React.PureComponent {
         <FormattedMessage
           id='status.reblogged_by'
           defaultMessage='{name} boosted'
-          values={{ name : link }}
+          values={{ name : linkifiedAccounts }}
         />
       );
     case 'favourite':
@@ -51,7 +63,7 @@ export default class StatusPrepend extends React.PureComponent {
         <FormattedMessage
           id='notification.favourite'
           defaultMessage='{name} favourited your status'
-          values={{ name : link }}
+          values={{ name : linkifiedAccounts }}
         />
       );
     case 'reblog':
@@ -59,7 +71,7 @@ export default class StatusPrepend extends React.PureComponent {
         <FormattedMessage
           id='notification.reblog'
           defaultMessage='{name} boosted your status'
-          values={{ name : link }}
+          values={{ name : linkifiedAccounts }}
         />
       );
     case 'status':
@@ -67,7 +79,7 @@ export default class StatusPrepend extends React.PureComponent {
         <FormattedMessage
           id='notification.status'
           defaultMessage='{name} just posted'
-          values={{ name: link }}
+          values={{ name: linkifiedAccounts }}
         />
       );
     case 'poll':
@@ -91,7 +103,7 @@ export default class StatusPrepend extends React.PureComponent {
         <FormattedMessage
           id='notification.update'
           defaultMessage='{name} edited a post'
-          values={{ name: link }}
+          values={{ name: linkifiedAccounts }}
         />
       );
     }
