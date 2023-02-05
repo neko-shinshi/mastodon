@@ -17,30 +17,44 @@ export default class StatusPrepend extends React.PureComponent {
     notificationId: PropTypes.number,
   };
 
-  handleClick = (acct, e) => {
+  handleAcctClick = (acct, e) => {
     const { parseClick } = this.props;
     parseClick(e, `/@${acct.get('acct')}`);
+  };
+
+  handleViewMoreClick = (e) => {
+    const { status, parseClick } = this.props;
+
+    const originalAuthor = status.getIn(['reblog', 'account', 'acct'], status.getIn(['account', 'acct']));
+    const originalStatusId = status.getIn(['reblog', 'id'], status.get('id'));
+    const url = `/@${originalAuthor}/${originalStatusId}` + this.getUrlSuffix();
+    parseClick(e, url);
+  };
+
+  getUrlSuffix = () => {
+    const { type } = this.props;
+    switch (type) {
+    case 'reblog':
+      return '/reblogs';
+    case 'favourite':
+      return '/favourites';
+    default:
+      return '';
+    }
   };
 
   Message = () => {
     const { type, accounts, status } = this.props;
 
-    let viewMoreHref = status.get('url');
-    switch (type) {
-    case 'reblog':
-      viewMoreHref += '/reblogs';
-      break;
-    case 'favourite':
-      viewMoreHref += '/favourites';
-      break;
-    }
+    const viewMoreHref = status.get('url') + this.getUrlSuffix();
 
-    let linkifiedAccounts = (
+    const linkifiedAccounts = (
       <span>
         <NameList
           accounts={accounts}
           viewMoreHref={viewMoreHref}
-          onAccountClick={this.handleClick}
+          onAccountClick={this.handleAcctClick}
+          onViewMoreClick={this.handleViewMoreClick}
         />
       </span>
     );
