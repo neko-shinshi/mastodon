@@ -3,7 +3,46 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import { injectIntl } from 'react-intl';
-import { useCallback } from 'react';
+
+/**
+ * Displays a single account (or label) as a link.
+ *
+ * Noteworthy that onClick gets called as `onClick(account, ev)` if an account is provided,
+ * but only gets called with `onClick(ev)` if no account was provided.
+ */
+class NameLink extends React.PureComponent {
+
+  static propTypes = {
+    account: ImmutablePropTypes.map,
+    href: PropTypes.string,
+    onClick: PropTypes.func,
+    children: PropTypes.string,
+  };
+
+  handleClick = (ev) => {
+    const { account, onClick } = this.props;
+
+    // account is not defined on "view more" namelinks
+    if (account) {
+      onClick(account, ev);
+    } else {
+      onClick(ev);
+    }
+  };
+
+  render() {
+    const { href, children } = this.props;
+    return (
+      <a
+        href={href}
+        className='status__display-name'
+        onClick={this.handleClick}
+        dangerouslySetInnerHTML={{ __html: children }}
+      />
+    );
+  }
+
+}
 
 /**
  * Displays a list of accounts as a comma-separated, link-ified list of displaynames.
@@ -19,32 +58,17 @@ export default class NameList extends React.PureComponent {
     onViewMoreClick: PropTypes.func,
   };
 
-  NameLink = ({ href, onClick, children }) => {
-    return (
-      <a
-        href={href}
-        className='status__display-name'
-        onClick={onClick}
-        dangerouslySetInnerHTML={{ __html: children }}
-      />
-    );
-  };
-
   render() {
-    const { NameLink } = this;
-    const { accounts, onAccountClick, intl, viewMoreHref, onViewMoreClick } = this.props;
+    const { accounts, intl, viewMoreHref, onAccountClick, onViewMoreClick } = this.props;
 
     // render a single name if there is only one account
     if (accounts.size === 1) {
-      const handleClick = useCallback((ev) => {
-        onAccountClick(accounts.get(0), ev);
-      }, [accounts]);
-
       return (
         <span>
           <NameLink
             href={accounts.get(0).get('url')}
-            onClick={handleClick}
+            account={accounts.get(0)}
+            onClick={onAccountClick}
           >
             {accounts.get(0).get('display_name_html') || accounts.get(0).get('username')}
           </NameLink>
@@ -76,16 +100,22 @@ export default class NameList extends React.PureComponent {
 
         // special case for the "and others" label
         if (currentElement === 2) {
-          return <NameLink href={viewMoreHref} key={accounts.get(currentElement).get('id')} onClick={onViewMoreClick}>{value}</NameLink>;
+          return (
+            <NameLink
+              key={accounts.get(currentElement).get('id')}
+              href={viewMoreHref}
+              onClick={onViewMoreClick}
+            >
+              {value}
+            </NameLink>
+          );
         }
 
-        let href = accounts.get(currentElement).get('url');
-        let handleClick = (ev) => {
-          onAccountClick(accounts.get(currentElement), ev);
-        };
+        const account = accounts.get(currentElement);
+        let href = account.get('url');
 
         // return the linkified label
-        return <NameLink href={href} key={accounts.get(currentElement).get('id')} onClick={handleClick}>{value}</NameLink>;
+        return <NameLink href={href} account={account} key={account.get('id')} onClick={onAccountClick}>{value}</NameLink>;
       } else {
         // if this is a separator, just print it out regularly
         return <React.Fragment key={`${accounts.get(currentElement).get('id')}_separator`}>{value}</React.Fragment>;

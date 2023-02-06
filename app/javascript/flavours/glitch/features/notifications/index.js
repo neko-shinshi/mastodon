@@ -226,30 +226,49 @@ class Notifications extends React.PureComponent {
     this.props.onMarkAsRead();
   };
 
+  /**
+   * Collapses notifications, making it so that if multiple interactions are done on the same post,
+   * it will show as a single notification (ie, "foo, bar, and baz favourited this post")
+   *
+   * @param {ImmutableList} notifications The list of notifications, ideally from Redux
+   * @param {ImmutableList} types Which notification types should be grouped up
+   * @returns {ImmutableList} A new list of notifications, collapsed so that multiple notifications
+   * on the same post are grouped up into a single notification.
+   */
   groupUpNotifications(notifications, types) {
     const groupedNotifications = [];
+
+    // for each notification....
     for (const notif of notifications) {
+
+      // `null` is used to signify that there is a "loading gap" in the notifications. We make sure that these loading gaps persist.
       if (!notif) {
         groupedNotifications.push(notif);
         continue;
       }
-      const newNotif = notif.set('account', ImmutableList([notif.get('account')]));
+
+      // Make sure that we only group up notifications of the provided types.
       if (types.includes(notif.get('type'))) {
+
+        // Get an already existing notification to collapse into
         const matchingNotifIdx = groupedNotifications.findIndex(
           other => other?.get('type') === notif.get('type') && other?.get('status') === notif.get('status'),
         );
         const matchingNotif = groupedNotifications[matchingNotifIdx];
+
+        // Collapse this notifcation into the existing notification if it exists,
+        // otherwise push it as a new notification.
         if (matchingNotif) {
           groupedNotifications[matchingNotifIdx] = matchingNotif.update(
             'account',
             ImmutableList(),
-            accounts => accounts.push(...newNotif.get('account')),
+            accounts => accounts.push(notif.get('account')),
           );
         } else {
-          groupedNotifications.push(newNotif);
+          groupedNotifications.push(notif.update('account', singleAccount => ImmutableList.of(singleAccount)));
         }
       } else {
-        groupedNotifications.push(newNotif);
+        groupedNotifications.push(notif);
       }
     }
     return ImmutableList(groupedNotifications);
