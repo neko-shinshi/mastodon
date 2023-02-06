@@ -56,7 +56,7 @@ export default class NameList extends React.PureComponent {
     let accountsToIntl;
     if (accounts.size > 3) {
       accountsToIntl = accounts.slice(0, 2).map(acct => acct.get('display_name_html') || acct.get('username'));
-      accountsToIntl = accountsToIntl.push(intl.formatMessage({ id: 'status.n_others', defaultMessage: '{n} others' }, { n: accounts.size - 2 }));
+      accountsToIntl = accountsToIntl.push(intl.formatMessage({ id: 'status.others', defaultMessage: 'some others' }));
     } else {
       accountsToIntl = accounts.map(acct => acct.get('display_name_html') || acct.get('username'));
     }
