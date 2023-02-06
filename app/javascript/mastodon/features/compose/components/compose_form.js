@@ -92,7 +92,7 @@ class ComposeForm extends ImmutablePureComponent {
     const isOnlyWhitespace = fulltext.length !== 0 && fulltext.trim().length === 0;
 
     return !(isSubmitting || isUploading || isChangingUpload || length(fulltext) > maxChars || (isOnlyWhitespace && !anyMedia));
-  }
+  };
 
   handleSubmit = (e) => {
     if (this.props.text !== this.autosuggestTextarea.textarea.value) {
