@@ -230,13 +230,16 @@ class Notifications extends React.PureComponent {
    * Collapses notifications, making it so that if multiple interactions are done on the same post,
    * it will show as a single notification (ie, "foo, bar, and baz favourited this post")
    *
-   * @param {ImmutableList} notifications The list of notifications, ideally from Redux
-   * @param {ImmutableList} types Which notification types should be grouped up
    * @returns {ImmutableList} A new list of notifications, collapsed so that multiple notifications
    * on the same post are grouped up into a single notification.
    */
-  groupUpNotifications(notifications, types) {
+  getGroupedNotifications() {
+    const { notifications, grouping } = this.props;
     const groupedNotifications = [];
+
+    // if grouping is { "favourite": true, "reblog": false, "foo": true, "bar": false }
+    // then typesToGroup is [ "favourite", "foo" ]
+    const typesToGroup = grouping.reduce((acc, enabled, groupBy) => enabled ? acc.push(groupBy) : acc, ImmutableList.of());
 
     // for each notification....
     for (const notif of notifications) {
@@ -248,7 +251,7 @@ class Notifications extends React.PureComponent {
       }
 
       // Make sure that we only group up notifications of the provided types.
-      if (types.includes(notif.get('type'))) {
+      if (typesToGroup.includes(notif.get('type'))) {
 
         // Get an already existing notification to collapse into
         const matchingNotifIdx = groupedNotifications.findIndex(
@@ -288,10 +291,7 @@ class Notifications extends React.PureComponent {
       ? (<FilterBarContainer />)
       : null;
 
-    // if grouping is { "favourite": true, "reblog": false, "foo": true, "bar": false }
-    // then groupBy is [ "favourite", "foo" ]
-    const groupBy = grouping.reduce((acc, enabled, groupBy) => enabled ? acc.push(groupBy) : acc, ImmutableList.of());
-    const notifications = this.groupUpNotifications(this.props.notifications, groupBy);
+    const notifications = this.getGroupedNotifications();
 
     if (isLoading && this.scrollableContent) {
       scrollableContent = this.scrollableContent;
