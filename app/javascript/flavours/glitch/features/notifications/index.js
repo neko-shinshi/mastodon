@@ -227,11 +227,8 @@ class Notifications extends React.PureComponent {
   };
 
   /**
-   * Collapses notifications, making it so that if multiple interactions are done on the same post,
-   * it will show as a single notification (ie, "foo, bar, and baz favourited this post")
-   *
-   * @returns {ImmutableList} A new list of notifications, collapsed so that multiple notifications
-   * on the same post are grouped up into a single notification.
+   * Gets the list of notifications, grouped up (as per user settings) such that multiple users' interactions on the same
+   * post are collapsed into a single notification.
    */
   getGroupedNotifications() {
     const { notifications, grouping } = this.props;
