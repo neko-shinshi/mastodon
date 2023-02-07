@@ -78,7 +78,8 @@ export default class NameList extends React.PureComponent {
 
     // turn a list of accounts into a list (max length 3) of labels
     let accountsToIntl;
-    if (accounts.size > 3) {
+    const hasOthers = accounts.size > 3;
+    if (hasOthers) {
       accountsToIntl = accounts.slice(0, 2).map(acct => acct.get('display_name_html') || acct.get('username'));
       accountsToIntl = accountsToIntl.push(intl.formatMessage({ id: 'notifications.others', defaultMessage: 'others' }));
     } else {
@@ -100,7 +101,7 @@ export default class NameList extends React.PureComponent {
         elementNum++;
 
         // special case for the "and others" label
-        if (currentElement === 2) {
+        if (hasOthers && currentElement === 2) {
           return (
             <NameLink
               key={account.get('id')}
