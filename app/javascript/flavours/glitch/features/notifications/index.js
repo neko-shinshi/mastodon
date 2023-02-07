@@ -228,7 +228,9 @@ class Notifications extends React.PureComponent {
 
   groupUpNotifications(notifications, types) {
     const groupedNotifications = [];
+
     for (const notif of notifications) {
+      if (notif === null) { break; }
       const newNotif = notif.set('account', ImmutableList([notif.get('account')]));
       if (types.includes(notif.get('type'))) {
         const matchingNotifIdx = groupedNotifications.findIndex(
