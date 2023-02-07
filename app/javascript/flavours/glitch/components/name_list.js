@@ -93,6 +93,7 @@ export default class NameList extends React.PureComponent {
     let elementNum = 0;
     return parts.map(({ type, value }) => {
       const currentElement = elementNum;
+      const account = accounts.get(currentElement);
 
       // if this is a label, linkify it
       if (type === 'element') {
@@ -102,7 +103,7 @@ export default class NameList extends React.PureComponent {
         if (currentElement === 2) {
           return (
             <NameLink
-              key={accounts.get(currentElement).get('id')}
+              key={account.get('id')}
               href={viewMoreHref}
               onClick={onViewMoreClick}
             >
@@ -111,14 +112,11 @@ export default class NameList extends React.PureComponent {
           );
         }
 
-        const account = accounts.get(currentElement);
-        let href = account.get('url');
-
         // return the linkified label
-        return <NameLink href={href} account={account} key={account.get('id')} onClick={onAccountClick}>{value}</NameLink>;
+        return <NameLink href={account.get('url')} account={account} key={account.get('id')} onClick={onAccountClick}>{value}</NameLink>;
       } else {
         // if this is a separator, just print it out regularly
-        return <React.Fragment key={`${accounts.get(currentElement).get('id')}_separator`}>{value}</React.Fragment>;
+        return <React.Fragment key={`${account.get('id')}_separator`}>{value}</React.Fragment>;
       }
     });
   }
