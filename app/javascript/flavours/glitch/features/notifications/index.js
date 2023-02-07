@@ -265,10 +265,10 @@ class Notifications extends React.PureComponent {
       ? (<FilterBarContainer />)
       : null;
 
-    const notifications = this.groupUpNotifications(
+    const notifications = this.props.notifications.size > 0 ? this.groupUpNotifications(
       this.props.notifications,
       grouping.reduce((acc, enabled, groupBy) => enabled ? acc.push(groupBy) : acc, ImmutableList.of()),
-    );
+    ) : ImmutableList.of();
 
     if (isLoading && this.scrollableContent) {
       scrollableContent = this.scrollableContent;
