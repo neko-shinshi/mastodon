@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -228,9 +228,9 @@ class Notifications extends React.PureComponent {
 
   groupUpNotifications(notifications, types) {
     const groupedNotifications = [];
-
+    notifications = notifications.filter(n => n !== null); // Weird state on mobile where this can have null values when returning to suspended app
     for (const notif of notifications) {
-      if (notif === null) { break; }
+      if (notif === null) { useState([]); } // We should never be in this state, something has gone wrong. Refresh the page.
       const newNotif = notif.set('account', ImmutableList([notif.get('account')]));
       if (types.includes(notif.get('type'))) {
         const matchingNotifIdx = groupedNotifications.findIndex(
