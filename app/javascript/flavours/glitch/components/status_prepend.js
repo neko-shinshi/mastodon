@@ -17,18 +17,16 @@ export default class StatusPrepend extends React.PureComponent {
     notificationId: PropTypes.number,
   };
 
-  handleAcctClick = (acct, e) => {
-    const { parseClick } = this.props;
-    parseClick(e, `/@${acct.get('acct')}`);
-  };
-
-  handleViewMoreClick = (e) => {
+  handleClick = (acct, e) => {
     const { status, parseClick } = this.props;
 
-    const originalAuthor = status.getIn(['reblog', 'account', 'acct'], status.getIn(['account', 'acct']));
-    const originalStatusId = status.getIn(['reblog', 'id'], status.get('id'));
-    const url = `/@${originalAuthor}/${originalStatusId}` + this.getUrlSuffix();
-    parseClick(e, url);
+    if (!acct) {
+      const originalAuthor = status.getIn(['reblog', 'account', 'acct'], status.getIn(['account', 'acct']));
+      const originalStatusId = status.getIn(['reblog', 'id'], status.get('id'));
+      parseClick(e, `/@${originalAuthor}/${originalStatusId}` + this.getUrlSuffix());
+    } else {
+      parseClick(e, `/@${acct.get('acct')}`);
+    }
   };
 
   getUrlSuffix = () => {
@@ -53,8 +51,7 @@ export default class StatusPrepend extends React.PureComponent {
         <NameList
           accounts={accounts}
           viewMoreHref={viewMoreHref}
-          onAccountClick={this.handleAcctClick}
-          onViewMoreClick={this.handleViewMoreClick}
+          onClick={this.handleClick}
         />
       </span>
     );

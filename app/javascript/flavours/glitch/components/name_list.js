@@ -21,13 +21,7 @@ class NameLink extends React.PureComponent {
 
   handleClick = (ev) => {
     const { account, onClick } = this.props;
-
-    // account is not defined on "view more" namelinks
-    if (account) {
-      onClick(account, ev);
-    } else {
-      onClick(ev);
-    }
+    onClick(account, ev);
   };
 
   render() {
@@ -54,12 +48,11 @@ export default class NameList extends React.PureComponent {
     intl: PropTypes.object,
     accounts: ImmutablePropTypes.listOf(ImmutablePropTypes.map),
     viewMoreHref: PropTypes.string,
-    onAccountClick: PropTypes.func,
-    onViewMoreClick: PropTypes.func,
+    onClick: PropTypes.func,
   };
 
   render() {
-    const { accounts, intl, viewMoreHref, onAccountClick, onViewMoreClick } = this.props;
+    const { accounts, intl, viewMoreHref, onClick } = this.props;
 
     // render a single name if there is only one account
     if (accounts.size === 1) {
@@ -68,7 +61,7 @@ export default class NameList extends React.PureComponent {
           <NameLink
             href={accounts.get(0).get('url')}
             account={accounts.get(0)}
-            onClick={onAccountClick}
+            onClick={onClick}
           >
             {accounts.get(0).get('display_name_html') || accounts.get(0).get('username')}
           </NameLink>
@@ -106,7 +99,7 @@ export default class NameList extends React.PureComponent {
             <NameLink
               key={account.get('id')}
               href={viewMoreHref}
-              onClick={onViewMoreClick}
+              onClick={onClick}
             >
               {value}
             </NameLink>
@@ -114,7 +107,7 @@ export default class NameList extends React.PureComponent {
         }
 
         // return the linkified label
-        return <NameLink href={account.get('url')} account={account} key={account.get('id')} onClick={onAccountClick}>{value}</NameLink>;
+        return <NameLink href={account.get('url')} account={account} key={account.get('id')} onClick={onClick}>{value}</NameLink>;
       } else {
         // if this is a separator, just print it out regularly
         return <React.Fragment key={`${account.get('id')}_separator`}>{value}</React.Fragment>;
