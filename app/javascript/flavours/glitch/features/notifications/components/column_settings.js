@@ -71,7 +71,10 @@ export default class ColumnSettings extends React.PureComponent {
           </span>
 
           <div className='column-settings__row'>
+<<<<<<< HEAD
             <SettingToggle id='group-reactions' prefix='notifications' settings={settings} settingPath={['grouping', 'reaction']} onChange={onChange} label={groupReactions} />
+=======
+>>>>>>> neatchee/feat/notification-collapse
             <SettingToggle id='group-favourites' prefix='notifications' settings={settings} settingPath={['grouping', 'favourite']} onChange={onChange} label={groupFavorites} />
             <SettingToggle id='group-boosts' prefix='notifications' settings={settings} settingPath={['grouping', 'reblog']} onChange={onChange} label={groupBoosts} />
           </div>
