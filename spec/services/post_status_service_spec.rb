@@ -138,7 +138,26 @@ RSpec.describe PostStatusService, type: :service do
     status = subject.call(account, text: "test status update")
 
     expect(ProcessMentionsService).to have_received(:new)
-    expect(mention_service).to have_received(:call).with(status)
+    expect(mention_service).to have_received(:call).with(status, save_records: false)
+  end
+
+  it 'safeguards mentions' do
+    account = Fabricate(:account)
+    mentioned_account = Fabricate(:account, username: 'alice')
+    unexpected_mentioned_account = Fabricate(:account, username: 'bob')
+
+    expect do
+      subject.call(account, text: '@alice hm, @bob is really annoying lately', allowed_mentions: [mentioned_account.id])
+    end.to raise_error(an_instance_of(PostStatusService::UnexpectedMentionsError).and(having_attributes(accounts: [unexpected_mentioned_account])))
+  end
+
+  it 'processes duplicate mentions correctly' do
+    account = Fabricate(:account)
+    mentioned_account = Fabricate(:account, username: 'alice')
+
+    expect do
+      subject.call(account, text: '@alice @alice @alice hey @alice')
+    end.not_to raise_error
   end
 
   it 'processes hashtags' do
@@ -181,7 +200,7 @@ RSpec.describe PostStatusService, type: :service do
     status = subject.call(
       account,
       text: "test status update",
-      media_ids: [media.id],
+      media_ids: [media.id]
     )
 
     expect(media.reload.status).to eq status
@@ -194,7 +213,7 @@ RSpec.describe PostStatusService, type: :service do
     status = subject.call(
       account,
       text: "test status update",
-      media_ids: [media.id],
+      media_ids: [media.id]
     )
 
     expect(media.reload.status).to eq nil
@@ -213,11 +232,11 @@ RSpec.describe PostStatusService, type: :service do
           Fabricate(:media_attachment, account: account),
           Fabricate(:media_attachment, account: account),
           Fabricate(:media_attachment, account: account),
-        ].map(&:id),
+        ].map(&:id)
       )
     end.to raise_error(
       Mastodon::ValidationError,
-      I18n.t('media_attachments.validations.too_many'),
+      I18n.t('media_attachments.validations.too_many')
     )
   end
 
@@ -235,11 +254,11 @@ RSpec.describe PostStatusService, type: :service do
         media_ids: [
           video,
           image,
-        ].map(&:id),
+        ].map(&:id)
       )
     end.to raise_error(
       Mastodon::ValidationError,
-      I18n.t('media_attachments.validations.images_and_video'),
+      I18n.t('media_attachments.validations.images_and_video')
     )
   end
 
