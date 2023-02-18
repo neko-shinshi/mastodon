@@ -31,7 +31,7 @@ export const textForScreenReader = (intl, status, rebloggedByText = false, expan
   const values = [
     displayName.length === 0 ? status.getIn(['account', 'acct']).split('@')[0] : displayName,
     status.get('spoiler_text') && !expanded ? status.get('spoiler_text') : status.get('search_index').slice(status.get('spoiler_text').length),
-    intl.formatDate(status.get('created_at'), { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }),
+    new Date(status.get('created_at')).toLocaleString(undefined, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }),
     status.getIn(['account', 'acct']),
   ];
 

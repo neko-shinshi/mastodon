@@ -813,7 +813,6 @@ DEPENDENCIES
   fog-core (<= 2.4.0)
   fog-openstack (~> 0.3)
   fuubar (~> 2.5)
-  gitlab-omniauth-openid-connect (~> 0.10.1)
   haml-rails (~> 2.0)
   hcaptcha (~> 7.1)
   hiredis (~> 0.6)
@@ -904,3 +903,9 @@ DEPENDENCIES
   webpacker (~> 5.4)
   webpush!
   xorcist (~> 1.1)
+
+RUBY VERSION
+   ruby 3.2.1p31
+
+BUNDLED WITH
+   2.4.6

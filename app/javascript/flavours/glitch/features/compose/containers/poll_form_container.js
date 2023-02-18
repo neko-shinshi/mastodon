@@ -2,6 +2,10 @@ import { connect } from 'react-redux';
 import PollForm from '../components/poll_form';
 import { addPollOption, removePollOption, changePollOption, changePollSettings } from 'flavours/glitch/actions/compose';
 import {
+  addPollOption,
+  removePollOption,
+  changePollOption,
+  changePollSettings,
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
