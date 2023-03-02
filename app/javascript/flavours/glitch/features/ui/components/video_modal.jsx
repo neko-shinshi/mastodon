@@ -2,11 +2,17 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Video from 'flavours/glitch/features/video';
+import { connect } from 'react-redux';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import Footer from 'flavours/glitch/features/picture_in_picture/components/footer';
 import { getAverageFromBlurhash } from 'flavours/glitch/blurhash';
 
-export default class VideoModal extends ImmutablePureComponent {
+const mapStateToProps = (state, { statusId }) => ({
+  language: state.getIn(['statuses', statusId, 'language']),
+});
+
+export default @connect(mapStateToProps, null, null, { forwardRef: true })
+class VideoModal extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -35,7 +41,7 @@ export default class VideoModal extends ImmutablePureComponent {
   }
 
   render () {
-    const { media, statusId, onClose } = this.props;
+    const { media, statusId, language, onClose } = this.props;
     const options = this.props.options || {};
 
     return (
@@ -53,6 +59,7 @@ export default class VideoModal extends ImmutablePureComponent {
             autoFocus
             detailed
             alt={media.get('description')}
+            lang={language}
           />
         </div>
 

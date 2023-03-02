@@ -6,6 +6,7 @@ export default class GIFV extends React.PureComponent {
   static propTypes = {
     src: PropTypes.string.isRequired,
     alt: PropTypes.string,
+    lang: PropTypes.string,
     width: PropTypes.number,
     height: PropTypes.number,
     onClick: PropTypes.func,
@@ -35,7 +36,7 @@ export default class GIFV extends React.PureComponent {
   };
 
   render () {
-    const { src, width, height, alt } = this.props;
+    const { src, width, height, alt, lang } = this.props;
     const { loading } = this.state;
 
     return (
@@ -48,6 +49,7 @@ export default class GIFV extends React.PureComponent {
             tabIndex='0'
             aria-label={alt}
             title={alt}
+	    lang={lang}
             onClick={this.handleClick}
           />
         )}
@@ -59,6 +61,7 @@ export default class GIFV extends React.PureComponent {
           aria-label={alt}
           title={alt}
           muted
+          lang={lang}
           loop
           autoPlay
           playsInline
