@@ -28,7 +28,6 @@ class InitialStateSerializer < ActiveModel::Serializer
     }
   end
 
-  # rubocop:disable Metrics/AbcSize
   def meta
     store = {
       streaming_api_base_url: Rails.configuration.x.streaming_api_base_url,
@@ -88,7 +87,6 @@ class InitialStateSerializer < ActiveModel::Serializer
 
     store
   end
-  # rubocop:enable Metrics/AbcSize
 
   def compose
     store = {}
