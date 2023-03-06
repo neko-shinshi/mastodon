@@ -170,7 +170,7 @@ class Item extends React.PureComponent {
 
       const originalUrl   = attachment.get('url');
       const originalWidth = attachment.getIn(['meta', 'original', 'width']);
-/
+
       const hasSize = typeof originalWidth === 'number' && typeof previewWidth === 'number';
 
       const srcSet = hasSize ? `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w` : null;
