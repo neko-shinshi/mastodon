@@ -49,7 +49,7 @@ export default class GIFV extends React.PureComponent {
             tabIndex='0'
             aria-label={alt}
             title={alt}
-	    lang={lang}
+            lang={lang}
             onClick={this.handleClick}
           />
         )}
@@ -60,6 +60,7 @@ export default class GIFV extends React.PureComponent {
           tabIndex='0'
           aria-label={alt}
           title={alt}
+          lang={lang}
           muted
           lang={lang}
           loop

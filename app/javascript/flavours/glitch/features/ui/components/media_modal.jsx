@@ -3,7 +3,7 @@ import ReactSwipeableViews from 'react-swipeable-views';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Video from 'flavours/glitch/features/video';
-import { connect} from 'react-redux';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { defineMessages, injectIntl } from 'react-intl';
 import IconButton from 'flavours/glitch/components/icon_button';

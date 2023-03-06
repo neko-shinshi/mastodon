@@ -21,6 +21,7 @@ class VideoModal extends ImmutablePureComponent {
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
     statusId: PropTypes.string,
+    language: PropTypes.string,
     options: PropTypes.shape({
       startTime: PropTypes.number,
       autoPlay: PropTypes.bool,

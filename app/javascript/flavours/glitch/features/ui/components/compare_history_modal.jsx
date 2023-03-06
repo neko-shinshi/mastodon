@@ -12,7 +12,7 @@ import RelativeTimestamp from 'flavours/glitch/components/relative_timestamp';
 import MediaAttachments from 'flavours/glitch/components/media_attachments';
 
 const mapStateToProps = (state, { statusId }) => ({
-	language: state.getIn(['statuses', statusId, 'language']),
+  language: state.getIn(['statuses', statusId, 'language']),
   versions: state.getIn(['history', statusId, 'items']),
 });
 

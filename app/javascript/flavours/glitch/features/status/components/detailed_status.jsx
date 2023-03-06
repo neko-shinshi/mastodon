@@ -230,7 +230,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
     }
 
     if (status.get('poll')) {
-      contentMedia.push(<PollContainer pollId={status.get('poll')} />);
+      contentMedia.push(<PollContainer pollId={status.get('poll')} lang={status.get('language')} />);
       contentMediaIcons.push('tasks');
     }
 

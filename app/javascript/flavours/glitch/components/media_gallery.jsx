@@ -254,7 +254,7 @@ class MediaGallery extends React.PureComponent {
     fullwidth: PropTypes.bool,
     hidden: PropTypes.bool,
     media: ImmutablePropTypes.list.isRequired,
-    lang: PropTypes.string, 
+    lang: PropTypes.string,
     size: PropTypes.object,
     onOpenMedia: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
@@ -370,7 +370,7 @@ class MediaGallery extends React.PureComponent {
     if (this.isStandaloneEligible()) {
       children = <Item standalone autoplay={autoplay} onClick={this.handleClick} attachment={media.get(0)} lang={lang} displayWidth={width} visible={visible} />;
     } else {
-      children = media.take(4).map((attachment, i) => <Item key={attachment.get('id')} autoplay={autoplay} onClick={this.handleClick} attachment={attachment} index={i} size={size} letterbox={letterbox} lang={lang} displayWidth={width} visible={visible || uncached} />);
+      children = media.take(4).map((attachment, i) => <Item key={attachment.get('id')} autoplay={autoplay} onClick={this.handleClick} attachment={attachment} index={i} lang={lang} size={size} letterbox={letterbox} displayWidth={width} visible={visible || uncached} />);
     }
 
     if (uncached) {

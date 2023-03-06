@@ -7,11 +7,11 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import Footer from 'flavours/glitch/features/picture_in_picture/components/footer';
 
 const mapStateToProps = (state, { statusId }) => ({
-  language= state.getIn(['statuses', statusId, 'language']),
+  language: state.getIn(['statuses', statusId, 'language']),
   accountStaticAvatar: state.getIn(['accounts', state.getIn(['statuses', statusId, 'account']), 'avatar_static']),
 });
 
-export default @connect(mapStateToProps, null, null, { forwardRef: true})
+export default @connect(mapStateToProps, null, null, { forwardRef: true })
 class AudioModal extends ImmutablePureComponent {
 
   static propTypes = {
