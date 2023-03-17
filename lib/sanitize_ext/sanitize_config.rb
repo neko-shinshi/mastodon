@@ -88,6 +88,11 @@ class Sanitize
         'blockquote' => %w(cite),
         'ol'         => %w(start reversed),
         'li'         => %w(value),
+        'a' => %w(href rel class title),
+        'span' => %w(class),
+        'blockquote' => %w(cite),
+        'ol' => %w(start reversed),
+        'li' => %w(value),
       },
 
       add_attributes: {
