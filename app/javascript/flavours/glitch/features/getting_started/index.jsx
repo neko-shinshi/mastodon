@@ -201,4 +201,4 @@ class GettingStarted extends ImmutablePureComponent {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(GettingStarted));
+export default connect(makeMapStateToProps, mapDispatchToProps)(injectIntl(GettingStarted));
