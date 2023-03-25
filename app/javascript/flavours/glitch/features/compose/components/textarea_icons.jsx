@@ -58,4 +58,4 @@ class TextareaIcons extends ImmutablePureComponent {
 
 }
 
-export default injectIntl(TextAreaIcons);
+export default injectIntl(TextareaIcons);
