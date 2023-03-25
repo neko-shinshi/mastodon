@@ -66,4 +66,5 @@ class ActionBar extends React.PureComponent {
 
 }
 
-export default connect(mapStateToProps)(injectIntl(ActionBar));
+export default injectIntl(ActionBar);
+
