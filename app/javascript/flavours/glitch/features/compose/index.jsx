@@ -113,4 +113,4 @@ class Compose extends React.PureComponent {
 
 }
 
-export default connect(mapStateToProps)(injectIntl(Compose));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(Compose));
