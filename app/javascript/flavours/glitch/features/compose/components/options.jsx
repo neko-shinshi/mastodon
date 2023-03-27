@@ -85,7 +85,7 @@ const mapStateToProps = (state, { name }) => ({
   checked: state.getIn(['compose', 'advanced_options', name]),
 });
 
-class ToggleOptionIntl extends ImmutablePureComponent {
+class ToggleOptionImpl extends ImmutablePureComponent {
 
   static propTypes = {
     name: PropTypes.string.isRequired,
@@ -114,7 +114,7 @@ class ToggleOptionIntl extends ImmutablePureComponent {
 
 }
 
-const ToggleOption = connect(mapStateToProps)(ToggleOptionIntl);
+const ToggleOption = connect(mapStateToProps)(ToggleOptionImpl);
 
 class ComposerOptions extends ImmutablePureComponent {
 
