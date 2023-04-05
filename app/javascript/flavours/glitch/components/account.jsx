@@ -27,8 +27,6 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
 });
 
-export default @injectIntl
-
 class VerifiedBadge extends React.PureComponent {
 
   static propTypes = {
