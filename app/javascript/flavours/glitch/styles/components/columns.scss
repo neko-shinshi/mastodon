@@ -261,6 +261,12 @@ $ui-header-height: 55px;
   }
 }
 
+.column-link__button {
+  width: 100%;
+  border: none;
+  text-align: left;
+}
+
 .column-link__icon {
   display: inline-block;
   margin-right: 5px;

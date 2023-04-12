@@ -62,7 +62,6 @@ export default class GIFV extends React.PureComponent {
           title={alt}
           lang={lang}
           muted
-          lang={lang}
           loop
           autoPlay
           playsInline
