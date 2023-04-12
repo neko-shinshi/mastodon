@@ -427,7 +427,7 @@ $ui-header-height: 55px;
   justify-content: space-around;
 
   button {
-    @extend .column-header__button;
+    @extend .column-header__button; // stylelint-disable-line scss/at-extend-no-missing-placeholder
 
     background: transparent;
     text-align: center;
@@ -650,6 +650,7 @@ $ui-header-height: 55px;
 .follow_requests-unlocked_explanation {
   background: darken($ui-base-color, 4%);
   contain: initial;
+  flex-grow: 0;
 }
 
 .error-column {
