@@ -150,7 +150,6 @@ const makeMapStateToProps = () => {
       askReplyConfirmation: state.getIn(['local_settings', 'confirm_before_clearing_draft']) && state.getIn(['compose', 'text']).trim().length !== 0,
       domain: state.getIn(['meta', 'domain']),
       pictureInPicture: getPictureInPicture(state, { id: props.params.statusId }),
-      emojiMap: makeCustomEmojiMap(state),
     };
   };
 
@@ -707,7 +706,6 @@ class Status extends ImmutablePureComponent {
                   showMedia={this.state.showMedia}
                   onToggleMediaVisibility={this.handleToggleMediaVisibility}
                   pictureInPicture={pictureInPicture}
-                  emojiMap={this.props.emojiMap}
                 />
 
                 <ActionBar
