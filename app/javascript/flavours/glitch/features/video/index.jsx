@@ -29,6 +29,7 @@ export const formatTime = secondsNum => {
   if (hours   < 10) hours   = '0' + hours;
   if (minutes < 10) minutes = '0' + minutes;
   if (seconds < 10) seconds = '0' + seconds;
+
   return (hours === '00' ? '' : `${hours}:`) + `${minutes}:${seconds}`;
 };
 
@@ -107,18 +108,18 @@ class Video extends React.PureComponent {
     currentTime: PropTypes.number,
     onOpenVideo: PropTypes.func,
     onCloseVideo: PropTypes.func,
-    letterbox: PropTypes.bool,
-    fullwidth: PropTypes.bool,
     detailed: PropTypes.bool,
     inline: PropTypes.bool,
     editable: PropTypes.bool,
     alwaysVisible: PropTypes.bool,
     cacheWidth: PropTypes.func,
-    intl: PropTypes.object.isRequired,
     visible: PropTypes.bool,
+    letterbox: PropTypes.bool,
+    fullwidth: PropTypes.bool,
+    preventPlayback: PropTypes.bool,
     onToggleVisibility: PropTypes.func,
     deployPictureInPicture: PropTypes.func,
-    preventPlayback: PropTypes.bool,
+    intl: PropTypes.object.isRequired,
     blurhash: PropTypes.string,
     autoPlay: PropTypes.bool,
     volume: PropTypes.number,
@@ -534,7 +535,7 @@ class Video extends React.PureComponent {
       return this.props.frameRate.split('/').reduce((p, c) => p / c);
     }
 
-    return this.props.frameRate || 25;
+    return this.props.frameRate;
   }
 
   render () {
@@ -553,7 +554,7 @@ class Video extends React.PureComponent {
 
       playerStyle.height = height;
     } else if (inline) {
-      return (<div className={computedClass} ref={this.setPlayerRef} tabindex={0} />);
+      return (<div className={computedClass} ref={this.setPlayerRef} tabIndex={0} />);
     }
 
     let preload;
@@ -576,10 +577,10 @@ class Video extends React.PureComponent {
 
     return (
       <div
+        role='menuitem'
         className={computedClass}
         style={playerStyle}
         ref={this.setPlayerRef}
-        role='button'
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         onClick={this.handleClickRoot}
@@ -599,7 +600,6 @@ class Video extends React.PureComponent {
           src={src}
           poster={preview}
           preload={preload}
-          loop
           role='button'
           tabIndex={0}
           aria-label={alt}

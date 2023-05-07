@@ -1,5 +1,5 @@
 import api, { getLinks } from '../api';
-import { importAccount, importFetchedAccount, importFetchedAccounts } from './importer';
+import { importFetchedAccount, importFetchedAccounts } from './importer';
 
 export const ACCOUNT_FETCH_REQUEST = 'ACCOUNT_FETCH_REQUEST';
 export const ACCOUNT_FETCH_SUCCESS = 'ACCOUNT_FETCH_SUCCESS';
@@ -84,6 +84,8 @@ export const PINNED_ACCOUNTS_FETCH_FAIL    = 'PINNED_ACCOUNTS_FETCH_FAIL';
 export const PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_READY  = 'PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_READY';
 export const PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_CLEAR  = 'PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_CLEAR';
 export const PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_CHANGE = 'PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_CHANGE';
+
+export const PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_FETCH_FAIL    = 'PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_FETCH_FAIL';
 
 export const PINNED_ACCOUNTS_EDITOR_RESET = 'PINNED_ACCOUNTS_EDITOR_RESET';
 
@@ -851,7 +853,14 @@ export function fetchPinnedAccountsSuggestions(q) {
     api(getState).get('/api/v1/accounts/search', { params }).then(response => {
       dispatch(importFetchedAccounts(response.data));
       dispatch(fetchPinnedAccountsSuggestionsReady(q, response.data));
-    });
+    }).catch(err => dispatch(fetchPinnedAccountsSuggestionsFail(err)));
+  };
+}
+
+export function fetchPinnedAccountsSuggestionsFail(error) {
+  return {
+    type: PINNED_ACCOUNTS_EDITOR_SUGGESTIONS_FETCH_FAIL,
+    error,
   };
 }
 

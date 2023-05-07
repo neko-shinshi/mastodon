@@ -989,7 +989,7 @@ const startServer = async () => {
     case 'public:media':
       resolve({
         channelIds: ['timeline:public:media'],
-        options: { needsFiltering: true, allowLocalOnly: isTruthy(location.query.allow_local_only) },
+        options: { needsFiltering: true, allowLocalOnly: isTruthy(params.allow_local_only) },
       });
 
       break;
