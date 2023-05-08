@@ -404,7 +404,6 @@ class UI extends React.Component {
 
     // On first launch, redirect to the follow recommendations page
     if (signedIn && this.props.firstLaunch) {
-      this.context.router.history.replace('/start');
       this.props.dispatch(showOnboardingOnce());
     }
 
