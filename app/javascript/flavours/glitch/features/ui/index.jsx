@@ -58,7 +58,7 @@ import {
 } from './util/async-components';
 import { HotKeys } from 'react-hotkeys';
 import initialState, { me, owner, singleUserMode, showTrends, trendsAsLanding } from '../../initial_state';
-import { showOnboardingOnce } from 'flavours/glitch/actions/onboarding';
+// FIXME onboarded not set - import { showOnboardingOnce } from 'flavours/glitch/actions/onboarding';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import Header from './components/header';
 
@@ -82,7 +82,7 @@ const mapStateToProps = state => ({
   showFaviconBadge: state.getIn(['local_settings', 'notifications', 'favicon_badge']),
   hicolorPrivacyIcons: state.getIn(['local_settings', 'hicolor_privacy_icons']),
   moved: state.getIn(['accounts', me, 'moved']) && state.getIn(['accounts', state.getIn(['accounts', me, 'moved'])]),
-  firstLaunch: !state.getIn(['settings', 'onboarded']),
+  // FIXME onboarded may not be set? - firstLaunch: !state.getIn(['settings', 'onboarded']),
   username: state.getIn(['accounts', me, 'username']),
 });
 
@@ -266,7 +266,7 @@ class UI extends React.Component {
     hicolorPrivacyIcons: PropTypes.bool,
     moved: PropTypes.map,
     layout: PropTypes.string.isRequired,
-    firstLaunch: PropTypes.bool,
+    // FIXME onbooarded not set correctly - firstLaunch: PropTypes.bool,
     username: PropTypes.string,
   };
 
@@ -402,10 +402,10 @@ class UI extends React.Component {
 
     this.favicon = new Favico({ animation:'none' });
 
-    // On first launch, redirect to the follow recommendations page
-    if (signedIn && this.props.firstLaunch) {
-      this.props.dispatch(showOnboardingOnce());
-    }
+    // FIXME not setting onboarded? - On first launch, redirect to the follow recommendations page
+    // if (signedIn && this.props.firstLaunch) {
+    //   this.props.dispatch(showOnboardingOnce());
+    // }
 
     if (signedIn) {
       this.props.dispatch(fetchMarkers());
