@@ -16,13 +16,13 @@ const SignInBanner = () => {
 
   if (registrationsOpen) {
     signupButton = (
-      <a href='/auth/sign_up' className='button button--block button-tertiary'>
+      <a href='/auth/sign_up' className='button button--block'>
         <FormattedMessage id='sign_in_banner.create_account' defaultMessage='Create account' />
       </a>
     );
   } else {
     signupButton = (
-      <button className='button button--block button-tertiary' onClick={openClosedRegistrationsModal}>
+      <button className='button button--block' onClick={openClosedRegistrationsModal}>
         <FormattedMessage id='sign_in_banner.create_account' defaultMessage='Create account' />
       </button>
     );
@@ -34,6 +34,7 @@ const SignInBanner = () => {
       <a href='/auth/sign_in' className='button button--block'><FormattedMessage id='sign_in_banner.sign_in' defaultMessage='Sign in' /></a>
       <a href='https://halcyon.urusai.social/' className='button button--block'>Alternative UI (Halcyon)</a>
       {signupButton}
+      <a href='/auth/sign_in' className='button button--block button-tertiary'><FormattedMessage id='sign_in_banner.sign_in' defaultMessage='Login' /></a>
     </div>
   );
 };
