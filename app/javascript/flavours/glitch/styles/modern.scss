@@ -1022,7 +1022,8 @@ body:not(.flavour-glitch)
   position: relative;
 }
 
-#mastodon
+.layout-single-column
+  #mastodon
   .account-timeline__header
   .account__header__bar
   .avatar
@@ -1030,6 +1031,13 @@ body:not(.flavour-glitch)
   position: absolute;
   bottom: 0;
   left: 100%;
+}
+
+#mastodon
+  .account-timeline__header
+  .account__header__bar
+  .avatar
+  .account-role {
   border-radius: var(--radius-round);
 }
 
