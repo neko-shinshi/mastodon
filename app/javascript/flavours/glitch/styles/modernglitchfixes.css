@@ -247,3 +247,8 @@ body.app-body.flavour-glitch > #mastodon .character-counter__wrapper {
 .status.collapsed .status__content {
   max-height: unset !important;
 }
+
+.status__action-bar-dropdown {
+  height: unset !important;
+  width: unset !important;
+}
