@@ -252,3 +252,9 @@ body.app-body.flavour-glitch > #mastodon .character-counter__wrapper {
   height: unset !important;
   width: unset !important;
 }
+
+@media (width <= 889px) {
+  #mastodon .status__action-bar:not(i, .status__action-bar-spacer) {
+    max-width: unset !important;
+  }
+}
