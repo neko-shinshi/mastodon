@@ -4467,15 +4467,6 @@ body:not(.flavour-glitch)
     overflow: hidden;
   }
 
-  #mastodon .columns-area__panels__main .compose-form__autosuggest-wrapper,
-  #mastodon .columns-area__panels__main .autosuggest-textarea,
-  #mastodon .columns-area__panels__main .autosuggest-textarea label,
-  #mastodon .columns-area__panels__main .autosuggest-textarea textarea {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-
   #mastodon .about.about.about {
     padding-inline: 10px !important;
   }
