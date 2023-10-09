@@ -1634,7 +1634,6 @@ body:not(.flavour-glitch)
   width: 0;
   flex-grow: 1;
   border-radius: 0;
-  padding: 0;
   margin: -100px !important;
   padding: 100px !important;
   padding-inline-end: 0.7em !important;
@@ -4910,7 +4909,7 @@ body:not(.flavour-glitch)
   }
 
   #mastodon:not(:has(.navigation-panel__sign-in-banner)) .ui__header {
-    z-index: 200;
+    z-index: 199;
   }
 
   #mastodon:not(:has(.navigation-panel__sign-in-banner)) .ui__header::before,
