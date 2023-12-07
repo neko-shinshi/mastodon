@@ -172,5 +172,6 @@
   "status.react": "React",
   "status.sensitive_toggle": "Click to view",
   "status.uncollapse": "Uncollapse",
-  "suggestions.dismiss": "Dismiss suggestion"
+  "suggestions.dismiss": "Dismiss suggestion",
+  "tooltips.reactions": "Reactions"
 }
