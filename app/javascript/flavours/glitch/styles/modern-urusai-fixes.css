@@ -20,6 +20,7 @@ body.app-body.flavour-glitch > #mastodon .notification__message > span,
 }
 
 .status.collapsed .status__content .status__content__translate-button,
-.status.collapsed .status__content .status-card {
+.status.collapsed .status__content .status-card,
+.status.collapsed .status__content .video-player {
   display: none;
 }
