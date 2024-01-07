@@ -195,10 +195,6 @@ body.app-body.flavour-glitch
   padding-top: 18px !important;
 }
 
-body.app-body.flavour-glitch > #mastodon .notification .account {
-  padding-inline-start: 0 !important;
-}
-
 body.app-body.flavour-glitch > #mastodon .notification__favourite-icon-wrapper {
   position: static;
   margin-inline-end: 10px;
