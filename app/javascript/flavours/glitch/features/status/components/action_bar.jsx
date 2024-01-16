@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import { ReactComponent as AddReactionIcon } from '@material-symbols/svg-600/outlined/add_reaction.svg';
 import { ReactComponent as BookmarkIcon } from '@material-symbols/svg-600/outlined/bookmark-fill.svg';
 import { ReactComponent as BookmarkBorderIcon } from '@material-symbols/svg-600/outlined/bookmark.svg';
 import { ReactComponent as MoreHorizIcon } from '@material-symbols/svg-600/outlined/more_horiz.svg';
@@ -228,17 +229,6 @@ class ActionBar extends PureComponent {
       }
     }
 
-    const canReact = signedIn && status.get('reactions').filter(r => r.get('count') > 0 && r.get('me')).size < maxReactions;
-    const reactButton = (
-      <IconButton
-        className='plus-icon'
-        onClick={this.handleNoOp} // EmojiPickerDropdown handles that
-        title={intl.formatMessage(messages.react)}
-        disabled={!canReact}
-        icon='plus'
-      />
-    );
-
     let replyIcon;
     let replyIconComponent;
 
@@ -249,6 +239,18 @@ class ActionBar extends PureComponent {
       replyIcon = 'reply-all';
       replyIconComponent = ReplyAllIcon;
     }
+
+    const canReact = signedIn && status.get('reactions').filter(r => r.get('count') > 0 && r.get('me')).size < maxReactions;
+    const reactButton = (
+      <IconButton
+        className='add-reaction-icon'
+        onClick={this.handleNoOp} // EmojiPickerDropdown handles that
+        title={intl.formatMessage(messages.react)}
+        disabled={!canReact}
+        icon='add_reaction'
+        iconComponent={AddReactionIcon}
+      />
+    );
 
     const reblogPrivate = status.getIn(['account', 'id']) === me && status.get('visibility') === 'private';
 

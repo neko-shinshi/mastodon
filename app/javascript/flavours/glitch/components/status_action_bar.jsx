@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
+import { ReactComponent as AddReactionIcon } from '@material-symbols/svg-600/outlined/add_reaction.svg';
 import { ReactComponent as BookmarkIcon } from '@material-symbols/svg-600/outlined/bookmark-fill.svg';
 import { ReactComponent as BookmarkBorderIcon } from '@material-symbols/svg-600/outlined/bookmark.svg';
 import { ReactComponent as MoreHorizIcon } from '@material-symbols/svg-600/outlined/more_horiz.svg';
@@ -337,7 +338,8 @@ class StatusActionBar extends ImmutablePureComponent {
         onClick={this.handleNoOp} // EmojiPickerDropdown handles that
         title={intl.formatMessage(messages.react)}
         disabled={!canReact}
-        icon='plus'
+        icon='add_reaction'
+        iconComponent={AddReactionIcon}
       />
     );
 
