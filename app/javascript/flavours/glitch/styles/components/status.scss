@@ -242,6 +242,7 @@
   line-height: inherit;
   cursor: pointer;
   vertical-align: top;
+  align-items: center;
 
   &:hover {
     background: lighten($ui-base-color, 33%);
@@ -254,6 +255,8 @@
     border-inline-start: 1px solid currentColor;
     padding: 0;
     padding-inline-start: 4px;
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -739,8 +742,7 @@
   .icon {
     width: 15px;
     height: 15px;
-    position: relative;
-    top: 0.145em;
+    vertical-align: middle;
   }
 }
 
@@ -1153,6 +1155,7 @@ a.status-card.compact:hover {
 
     .icon {
       color: $dark-text-color;
+      vertical-align: middle;
     }
   }
 }
