@@ -856,7 +856,6 @@ class Status extends ImmutablePureComponent {
               canReact={this.context.identity.signedIn}
             />
 
-
             {(!isCollapsed || !(muted || !settings.getIn(['collapsed', 'show_action_bar']))) && (
               <StatusActionBar
                 status={status}
