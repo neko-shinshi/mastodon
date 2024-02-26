@@ -26,6 +26,7 @@ export default class StatusPrepend extends PureComponent {
     accounts: ImmutablePropTypes.listOf(ImmutablePropTypes.map.isRequired),
     parseClick: PropTypes.func.isRequired,
     notificationId: PropTypes.number,
+    children: PropTypes.node,
   };
 
   handleClick = (acct, e) => {
@@ -53,7 +54,7 @@ export default class StatusPrepend extends PureComponent {
   };
 
   Message = () => {
-    const { type, accounts, status } = this.props;
+    const { type, accounts } = this.props;
 
     const viewMoreHref = status.get('url') + this.getUrlSuffix();
 
@@ -142,7 +143,7 @@ export default class StatusPrepend extends PureComponent {
 
   render () {
     const { Message } = this;
-    const { type } = this.props;
+    const { type, children } = this.props;
 
     let iconId, iconComponent;
 
@@ -180,14 +181,13 @@ export default class StatusPrepend extends PureComponent {
 
     return !type ? null : (
       <aside className={type === 'reblogged_by' || type === 'featured' ? 'status__prepend' : 'notification__message'}>
-        <div className={type === 'reblogged_by' || type === 'featured' ? 'status__prepend-icon-wrapper' : 'notification__favourite-icon-wrapper'}>
-          <Icon
-            className={`status__prepend-icon ${type === 'favourite' ? 'star-icon' : ''}`}
-            id={iconId}
-            icon={iconComponent}
-          />
-        </div>
+        <Icon
+          className={`status__prepend-icon ${type === 'favourite' ? 'star-icon' : ''}`}
+          id={iconId}
+          icon={iconComponent}
+        />
         <Message />
+        {children}
       </aside>
     );
   }
