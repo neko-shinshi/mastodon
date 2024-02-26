@@ -54,7 +54,7 @@ export default class StatusPrepend extends PureComponent {
   };
 
   Message = () => {
-    const { type, accounts } = this.props;
+    const { type, accounts, status } = this.props;
 
     const viewMoreHref = status.get('url') + this.getUrlSuffix();
 
