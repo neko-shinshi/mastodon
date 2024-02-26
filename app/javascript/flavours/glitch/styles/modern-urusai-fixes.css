@@ -38,3 +38,7 @@ body.app-body.flavour-glitch > #mastodon .notification__message > span,
   button {
   padding: 3px;
 }
+
+body.app-body.flavour-glitch > #mastodon .reactions-bar button:not(.active) {
+  background: lighten($ui-base-color, 12%);
+}
