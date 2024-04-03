@@ -6,7 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 //  Mastodon imports.
 import { Avatar } from './avatar';
-import AvatarOverlay from './avatar_overlay';
+import { AvatarOverlay } from './avatar_overlay';
 import { DisplayName } from './display_name';
 
 export default class StatusHeader extends PureComponent {
@@ -39,32 +39,25 @@ export default class StatusHeader extends PureComponent {
 
     let statusAvatar;
     if (friends === undefined || friends === null || !friends.get(0)) {
-      statusAvatar = <Avatar account={account} size={48} />;
+      statusAvatar = <Avatar account={account} size={46} />;
     } else {
       statusAvatar = <AvatarOverlay account={account} friend={friends.get(0)} />;
     }
 
     return (
-      <div className='status__info__account'>
-        <a
-          href={account.get('url')}
-          target='_blank'
-          className='status__avatar'
-          onClick={this.handleAccountClick}
-          rel='noopener noreferrer'
-        >
+      <a
+        href={account.get('url')}
+        className='status__display-name'
+        target='_blank'
+        onClick={this.handleAccountClick}
+        rel='noopener noreferrer'
+      >
+        <div className='status__avatar'>
           {statusAvatar}
-        </a>
-        <a
-          href={account.get('url')}
-          target='_blank'
-          className='status__display-name'
-          onClick={this.handleAccountClick}
-          rel='noopener noreferrer'
-        >
-          <DisplayName account={account} />
-        </a>
-      </div>
+        </div>
+
+        <DisplayName account={account} />
+      </a>
     );
   }
 

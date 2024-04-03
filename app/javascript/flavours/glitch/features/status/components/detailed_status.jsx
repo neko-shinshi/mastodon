@@ -1,36 +1,36 @@
 import PropTypes from 'prop-types';
 
-import { injectIntl, FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 import { AnimatedNumber } from 'flavours/glitch/components/animated_number';
 import AttachmentList from 'flavours/glitch/components/attachment_list';
-import { Avatar } from 'flavours/glitch/components/avatar';
-import { DisplayName } from 'flavours/glitch/components/display_name';
 import EditedTimestamp from 'flavours/glitch/components/edited_timestamp';
-import { Icon } from 'flavours/glitch/components/icon';
-import MediaGallery from 'flavours/glitch/components/media_gallery';
+import { getHashtagBarForStatus } from 'flavours/glitch/components/hashtag_bar';
 import PictureInPicturePlaceholder from 'flavours/glitch/components/picture_in_picture_placeholder';
-import StatusContent from 'flavours/glitch/components/status_content';
-import StatusReactions from 'flavours/glitch/components/status_reactions';
-import VisibilityIcon from 'flavours/glitch/components/status_visibility_icon';
+import { VisibilityIcon } from 'flavours/glitch/components/visibility_icon';
 import PollContainer from 'flavours/glitch/containers/poll_container';
-import Audio from 'flavours/glitch/features/audio';
-import Video from 'flavours/glitch/features/video';
+import { WithRouterPropTypes } from 'flavours/glitch/utils/react_router';
 
+import { Avatar } from '../../../components/avatar';
+import { DisplayName } from '../../../components/display_name';
+import MediaGallery from '../../../components/media_gallery';
+import StatusContent from '../../../components/status_content';
+import StatusReactions from '../../../components/status_reactions';
+import Audio from '../../audio';
 import scheduleIdleTask from '../../ui/util/schedule_idle_task';
+import Video from '../../video';
 
 import Card from './card';
 
 class DetailedStatus extends ImmutablePureComponent {
 
   static contextTypes = {
-    router: PropTypes.object,
     identity: PropTypes.object,
   };
 
@@ -54,7 +54,7 @@ class DetailedStatus extends ImmutablePureComponent {
     onToggleMediaVisibility: PropTypes.func,
     onReactionAdd: PropTypes.func.isRequired,
     onReactionRemove: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
+    ...WithRouterPropTypes,
   };
 
   state = {
@@ -62,18 +62,18 @@ class DetailedStatus extends ImmutablePureComponent {
   };
 
   handleAccountClick = (e) => {
-    if (e.button === 0 && !(e.ctrlKey || e.altKey || e.metaKey) && this.context.router) {
+    if (e.button === 0 && !(e.ctrlKey || e.altKey || e.metaKey) && this.props.history) {
       e.preventDefault();
-      this.context.router.history.push(`/@${this.props.status.getIn(['account', 'acct'])}`);
+      this.props.history.push(`/@${this.props.status.getIn(['account', 'acct'])}`);
     }
 
     e.stopPropagation();
   };
 
   parseClick = (e, destination) => {
-    if (e.button === 0 && !(e.ctrlKey || e.altKey || e.metaKey) && this.context.router) {
+    if (e.button === 0 && !(e.ctrlKey || e.altKey || e.metaKey) && this.props.history) {
       e.preventDefault();
-      this.context.router.history.push(destination);
+      this.props.history.push(destination);
     }
 
     e.stopPropagation();
@@ -136,9 +136,7 @@ class DetailedStatus extends ImmutablePureComponent {
 
     let applicationLink = '';
     let reblogLink = '';
-    let reblogIcon = 'retweet';
     let favouriteLink = '';
-    let edited = '';
 
     //  Depending on user settings, some media are considered as parts of the
     //  contents (affected by CW) while other will be displayed outside of the
@@ -241,73 +239,55 @@ class DetailedStatus extends ImmutablePureComponent {
     }
 
     if (status.get('application')) {
-      applicationLink = <> · <a className='detailed-status__application' href={status.getIn(['application', 'website'])} target='_blank' rel='noopener noreferrer'>{status.getIn(['application', 'name'])}</a></>;
+      applicationLink = <>·<a className='detailed-status__application' href={status.getIn(['application', 'website'])} target='_blank' rel='noopener noreferrer'>{status.getIn(['application', 'name'])}</a></>;
     }
 
-    const visibilityLink = <> · <VisibilityIcon visibility={status.get('visibility')} /></>;
-
-    if (status.get('visibility') === 'direct') {
-      reblogIcon = 'envelope';
-    } else if (status.get('visibility') === 'private') {
-      reblogIcon = 'lock';
-    }
+    const visibilityLink = <>·<VisibilityIcon visibility={status.get('visibility')} /></>;
 
     if (!['unlisted', 'public'].includes(status.get('visibility'))) {
       reblogLink = null;
-    } else if (this.context.router) {
+    } else if (this.props.history) {
       reblogLink = (
-        <>
-          {' · '}
-          <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}/reblogs`} className='detailed-status__link'>
-            <Icon id={reblogIcon} />
-            <span className='detailed-status__reblogs'>
-              <AnimatedNumber value={status.get('reblogs_count')} />
-            </span>
-          </Link>
-        </>
+        <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}/reblogs`} className='detailed-status__link'>
+          <span className='detailed-status__reblogs'>
+            <AnimatedNumber value={status.get('reblogs_count')} />
+          </span>
+          <FormattedMessage id='status.reblogs' defaultMessage='{count, plural, one {boost} other {boosts}}' values={{ count: status.get('reblogs_count') }} />
+        </Link>
       );
     } else {
       reblogLink = (
-        <>
-          {' · '}
-          <a href={`/interact/${status.get('id')}?type=reblog`} className='detailed-status__link' onClick={this.handleModalLink}>
-            <Icon id={reblogIcon} />
-            <span className='detailed-status__reblogs'>
-              <AnimatedNumber value={status.get('reblogs_count')} />
-            </span>
-          </a>
-        </>
+        <a href={`/interact/${status.get('id')}?type=reblog`} className='detailed-status__link' onClick={this.handleModalLink}>
+          <span className='detailed-status__reblogs'>
+            <AnimatedNumber value={status.get('reblogs_count')} />
+          </span>
+          <FormattedMessage id='status.reblogs' defaultMessage='{count, plural, one {boost} other {boosts}}' values={{ count: status.get('reblogs_count') }} />
+        </a>
       );
     }
 
-    if (this.context.router) {
+    if (this.props.history) {
       favouriteLink = (
         <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}/favourites`} className='detailed-status__link'>
-          <Icon id='star' />
           <span className='detailed-status__favorites'>
             <AnimatedNumber value={status.get('favourites_count')} />
           </span>
+          <FormattedMessage id='status.favourites' defaultMessage='{count, plural, one {favorite} other {favorites}}' values={{ count: status.get('favourites_count') }} />
         </Link>
       );
     } else {
       favouriteLink = (
         <a href={`/interact/${status.get('id')}?type=favourite`} className='detailed-status__link' onClick={this.handleModalLink}>
-          <Icon id='star' />
           <span className='detailed-status__favorites'>
             <AnimatedNumber value={status.get('favourites_count')} />
           </span>
+          <FormattedMessage id='status.favourites' defaultMessage='{count, plural, one {favorite} other {favorites}}' values={{ count: status.get('favourites_count') }} />
         </a>
       );
     }
 
-    if (status.get('edited_at')) {
-      edited = (
-        <>
-          {' · '}
-          <EditedTimestamp statusId={status.get('id')} timestamp={status.get('edited_at')} />
-        </>
-      );
-    }
+    const {statusContentProps, hashtagBar} = getHashtagBarForStatus(status);
+    contentMedia.push(hashtagBar);
 
     return (
       <div style={outerStyle}>
@@ -332,6 +312,7 @@ class DetailedStatus extends ImmutablePureComponent {
             rewriteMentions={settings.get('rewrite_mentions')}
             zoomEmojisOnHover={settings.get('zoom_emojis_on_hover')}
             disabled
+            {...statusContentProps}
           />
 
           <StatusReactions
@@ -343,9 +324,23 @@ class DetailedStatus extends ImmutablePureComponent {
           />
 
           <div className='detailed-status__meta'>
-            <a className='detailed-status__datetime' href={status.get('url')} target='_blank' rel='noopener noreferrer'>
-              <FormattedDate value={new Date(status.get('created_at'))} hour12={false} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
-            </a>{edited}{visibilityLink}{applicationLink}{reblogLink} · {favouriteLink}
+            <div className='detailed-status__meta__line'>
+              <a className='detailed-status__datetime' href={status.get('url')} target='_blank' rel='noopener noreferrer'>
+                <FormattedDate value={new Date(status.get('created_at'))} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
+              </a>
+
+              {visibilityLink}
+
+              {applicationLink}
+            </div>
+
+            {status.get('edited_at') && <div className='detailed-status__meta__line'><EditedTimestamp statusId={status.get('id')} timestamp={status.get('edited_at')} /></div>}
+
+            <div className='detailed-status__meta__line'>
+              {reblogLink}
+              {reblogLink && <>·</>}
+              {favouriteLink}
+            </div>
           </div>
         </div>
       </div>
@@ -354,4 +349,4 @@ class DetailedStatus extends ImmutablePureComponent {
 
 }
 
-export default injectIntl(DetailedStatus);
+export default withRouter(DetailedStatus);

@@ -14,6 +14,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     else
       create_status
     end
+  rescue Mastodon::RejectPayload
+    reject_payload!
   end
 
   private
@@ -46,8 +48,12 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     )
   end
 
+  def reject_pattern?
+    Setting.reject_pattern.present? && @object['content']&.match?(Setting.reject_pattern)
+  end
+
   def create_status
-    return reject_payload! if unsupported_object_type? || non_matching_uri_hosts?(@account.uri, object_uri) || tombstone_exists? || !related_to_local_activity?
+    return reject_payload! if unsupported_object_type? || non_matching_uri_hosts?(@account.uri, object_uri) || tombstone_exists? || !related_to_local_activity? || reject_pattern?
 
     with_redis_lock("create:#{object_uri}") do
       return if delete_arrived_first?(object_uri) || poll_vote?
@@ -79,8 +85,14 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     @params               = {}
 
     process_status_params
+
+    raise Mastodon::RejectPayload if MediaAttachment.where(id: @params[:media_attachment_ids]).where(blurhash: Setting.reject_blurhash.split(/\r?\n/).filter(&:present?).uniq).present?
+
     process_tags
     process_audience
+
+    # Reject the status unless all the hashtags are usable:
+    return reject_payload! unless @tags.all?(&:usable?)
 
     ApplicationRecord.transaction do
       @status = Status.create!(@params)
@@ -108,7 +120,9 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
   end
 
   def process_status_params
-    @status_parser = ActivityPub::Parser::StatusParser.new(@json, followers_collection: @account.followers_url)
+    @status_parser = ActivityPub::Parser::StatusParser.new(@json, followers_collection: @account.followers_url, object: @object)
+
+    attachment_ids = process_attachments.take(4).map(&:id)
 
     @params = {
       uri: @status_parser.uri,
@@ -125,7 +139,8 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
       visibility: @status_parser.visibility,
       thread: replied_to_status,
       conversation: conversation_from_uri(@object['conversation']),
-      media_attachment_ids: process_attachments.take(4).map(&:id),
+      media_attachment_ids: attachment_ids,
+      ordered_media_attachment_ids: attachment_ids,
       poll: process_poll,
     }
   end
@@ -280,6 +295,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
         RedownloadMediaWorker.perform_in(rand(30..600).seconds, media_attachment.id)
       rescue Seahorse::Client::NetworkingError => e
         Rails.logger.warn "Error storing media attachment: #{e}"
+        RedownloadMediaWorker.perform_async(media_attachment.id)
       end
     end
 
@@ -316,7 +332,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     already_voted = true
 
     with_redis_lock("vote:#{replied_to_status.poll_id}:#{@account.id}") do
-      already_voted = poll.votes.where(account: @account).exists?
+      already_voted = poll.votes.exists?(account: @account)
       poll.votes.create!(account: @account, choice: poll.options.index(@object['name']), uri: object_uri)
     end
 
@@ -402,7 +418,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
 
     return false if local_usernames.empty?
 
-    Account.local.where(username: local_usernames).exists?
+    Account.local.exists?(username: local_usernames)
   end
 
   def tombstone_exists?

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 
-import { undoUploadCompose, initMediaEditModal, submitCompose } from 'flavours/glitch/actions/compose';
-
+import { undoUploadCompose, initMediaEditModal, submitCompose } from '../../../actions/compose';
 import Upload from '../components/upload';
 
 const mapStateToProps = (state, { id }) => ({
   media: state.getIn(['compose', 'media_attachments']).find(item => item.get('id') === id),
+  sensitive: state.getIn(['compose', 'sensitive']),
 });
 
 const mapDispatchToProps = dispatch => ({

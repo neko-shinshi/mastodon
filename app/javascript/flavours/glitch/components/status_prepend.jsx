@@ -6,6 +6,13 @@ import { FormattedMessage } from 'react-intl';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import EditIcon from '@/material-icons/400-24px/edit.svg?react';
+import HomeIcon from '@/material-icons/400-24px/home-fill.svg?react';
+import InsertChartIcon from '@/material-icons/400-24px/insert_chart.svg?react';
+import MoodIcon from '@/material-icons/400-24px/mood.svg?react';
+import PushPinIcon from '@/material-icons/400-24px/push_pin.svg?react';
+import RepeatIcon from '@/material-icons/400-24px/repeat.svg?react';
+import StarIcon from '@/material-icons/400-24px/star-fill.svg?react';
 import { Icon } from 'flavours/glitch/components/icon';
 import { me } from 'flavours/glitch/initial_state';
 
@@ -19,6 +26,7 @@ export default class StatusPrepend extends PureComponent {
     accounts: ImmutablePropTypes.listOf(ImmutablePropTypes.map.isRequired),
     parseClick: PropTypes.func.isRequired,
     notificationId: PropTypes.number,
+    children: PropTypes.node,
   };
 
   handleClick = (acct, e) => {
@@ -86,7 +94,7 @@ export default class StatusPrepend extends PureComponent {
         <FormattedMessage
           id='notification.reaction'
           defaultMessage='{name} reacted to your status'
-          values={{ name : linkifiedAccounts }}
+          values={{ name: linkifiedAccounts }}
         />
       );
     case 'reblog':
@@ -135,44 +143,51 @@ export default class StatusPrepend extends PureComponent {
 
   render () {
     const { Message } = this;
-    const { type } = this.props;
+    const { type, children } = this.props;
 
-    let iconId;
+    let iconId, iconComponent;
 
     switch(type) {
     case 'favourite':
       iconId = 'star';
+      iconComponent = StarIcon;
       break;
     case 'reaction':
-      iconId = 'plus';
+      iconId = 'mood';
+      iconComponent = MoodIcon;
       break;
     case 'featured':
       iconId = 'thumb-tack';
+      iconComponent = PushPinIcon;
       break;
     case 'poll':
       iconId = 'tasks';
+      iconComponent = InsertChartIcon;
       break;
     case 'reblog':
     case 'reblogged_by':
       iconId = 'retweet';
+      iconComponent = RepeatIcon;
       break;
     case 'status':
       iconId = 'bell';
+      iconComponent = HomeIcon;
       break;
     case 'update':
       iconId = 'pencil';
+      iconComponent = EditIcon;
       break;
     }
 
     return !type ? null : (
       <aside className={type === 'reblogged_by' || type === 'featured' ? 'status__prepend' : 'notification__message'}>
-        <div className={type === 'reblogged_by' || type === 'featured' ? 'status__prepend-icon-wrapper' : 'notification__favourite-icon-wrapper'}>
-          <Icon
-            className={`status__prepend-icon ${type === 'favourite' ? 'star-icon' : ''}`}
-            id={iconId}
-          />
-        </div>
+        <Icon
+          className={`status__prepend-icon ${type === 'favourite' ? 'star-icon' : ''}`}
+          id={iconId}
+          icon={iconComponent}
+        />
         <Message />
+        {children}
       </aside>
     );
   }

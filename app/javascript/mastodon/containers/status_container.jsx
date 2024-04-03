@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 
 import { connect } from 'react-redux';
 
@@ -15,7 +15,7 @@ import {
   directCompose,
 } from '../actions/compose';
 import {
-  blockDomain,
+  initDomainBlockModal,
   unblockDomain,
 } from '../actions/domain_blocks';
 import {
@@ -30,8 +30,6 @@ import {
   unbookmark,
   pin,
   unpin,
-  addReaction,
-  removeReaction,
 } from '../actions/interactions';
 import { openModal } from '../actions/modal';
 import { initMuteModal } from '../actions/mutes';
@@ -50,7 +48,7 @@ import {
 } from '../actions/statuses';
 import Status from '../components/status';
 import { boostModal, deleteModal } from '../initial_state';
-import { makeGetStatus, makeGetPictureInPicture} from '../selectors';
+import { makeGetStatus, makeGetPictureInPicture } from '../selectors';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
@@ -135,14 +133,6 @@ const mapDispatchToProps = (dispatch, { intl, contextType }) => ({
     } else {
       dispatch(pin(status));
     }
-  },
-
-  onReactionAdd (statusId, name, url) {
-    dispatch(addReaction(statusId, name, url));
-  },
-
-  onReactionRemove (statusId, name) {
-    dispatch(removeReaction(statusId, name));
   },
 
   onEmbed (status) {
@@ -263,15 +253,8 @@ const mapDispatchToProps = (dispatch, { intl, contextType }) => ({
     dispatch(toggleStatusCollapse(status.get('id'), isCollapsed));
   },
 
-  onBlockDomain (domain) {
-    dispatch(openModal({
-      modalType: 'CONFIRM',
-      modalProps: {
-        message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications. Your followers from that domain will be removed.' values={{ domain: <strong>{domain}</strong> }} />,
-        confirm: intl.formatMessage(messages.blockDomainConfirm),
-        onConfirm: () => dispatch(blockDomain(domain)),
-      },
-    }));
+  onBlockDomain (account) {
+    dispatch(initDomainBlockModal(account));
   },
 
   onUnblockDomain (domain) {

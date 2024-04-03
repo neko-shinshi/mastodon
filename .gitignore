@@ -31,9 +31,6 @@
 # Ignore Vagrant files
 .vagrant/
 
-# Ignore Capistrano customizations
-/config/deploy/*
-
 # Ignore IDE files
 .vscode/
 .idea/
@@ -58,8 +55,22 @@ npm-debug.log
 yarn-error.log
 yarn-debug.log
 
+# From https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # Ignore vagrant log files
 *-cloudimg-console.log
 
 # Ignore Docker option files
 docker-compose.override.yml
+
+# Ignore some local files for Urusai
+import_emoji.rb
+log.txt
+public.old/

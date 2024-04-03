@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 
 import classNames from 'classnames';
+import { withRouter } from 'react-router-dom';
 
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 import { HotKeys } from 'react-hotkeys';
 
+import CheckIcon from '@/material-icons/400-24px/check.svg?react';
+import CloseIcon from '@/material-icons/400-24px/close.svg?react';
+import PersonIcon from '@/material-icons/400-24px/person-fill.svg?react';
 import { Avatar } from 'flavours/glitch/components/avatar';
 import { DisplayName } from 'flavours/glitch/components/display_name';
 import { Icon } from 'flavours/glitch/components/icon';
 import { IconButton } from 'flavours/glitch/components/icon_button';
-import Permalink from 'flavours/glitch/components/permalink';
+import { Permalink } from 'flavours/glitch/components/permalink';
+import { WithRouterPropTypes } from 'flavours/glitch/utils/react_router';
 
 import NotificationOverlayContainer from '../containers/overlay_container';
 
@@ -25,12 +30,13 @@ const messages = defineMessages({
 class FollowRequest extends ImmutablePureComponent {
 
   static propTypes = {
-    account: ImmutablePropTypes.map.isRequired,
+    account: ImmutablePropTypes.record.isRequired,
     onAuthorize: PropTypes.func.isRequired,
     onReject: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     notification: ImmutablePropTypes.map.isRequired,
     unread: PropTypes.bool,
+    ...WithRouterPropTypes,
   };
 
   handleMoveUp = () => {
@@ -48,15 +54,15 @@ class FollowRequest extends ImmutablePureComponent {
   };
 
   handleOpenProfile = () => {
-    const { notification } = this.props;
-    this.context.router.history.push(`/@${notification.getIn(['account', 'acct'])}`);
+    const { history, notification } = this.props;
+    history.push(`/@${notification.getIn(['account', 'acct'])}`);
   };
 
   handleMention = e => {
     e.preventDefault();
 
-    const { notification, onMention } = this.props;
-    onMention(notification.get('account'), this.context.router.history);
+    const { history, notification, onMention } = this.props;
+    onMention(notification.get('account'), history);
   };
 
   getHandlers () {
@@ -102,9 +108,7 @@ class FollowRequest extends ImmutablePureComponent {
       <HotKeys handlers={this.getHandlers()}>
         <div className={classNames('notification notification-follow-request focusable', { unread })} tabIndex={0}>
           <div className='notification__message'>
-            <div className='notification__favourite-icon-wrapper'>
-              <Icon id='user' fixedWidth />
-            </div>
+            <Icon id='user' icon={PersonIcon} />
 
             <FormattedMessage
               id='notification.follow_request'
@@ -121,8 +125,8 @@ class FollowRequest extends ImmutablePureComponent {
               </Permalink>
 
               <div className='account__relationship'>
-                <IconButton title={intl.formatMessage(messages.authorize)} icon='check' onClick={onAuthorize} />
-                <IconButton title={intl.formatMessage(messages.reject)} icon='times' onClick={onReject} />
+                <IconButton title={intl.formatMessage(messages.authorize)} icon='check' iconComponent={CheckIcon} onClick={onAuthorize} />
+                <IconButton title={intl.formatMessage(messages.reject)} icon='times' iconComponent={CloseIcon} onClick={onReject} />
               </div>
             </div>
           </div>
@@ -135,4 +139,4 @@ class FollowRequest extends ImmutablePureComponent {
 
 }
 
-export default injectIntl(FollowRequest);
+export default withRouter(injectIntl(FollowRequest));

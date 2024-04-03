@@ -1,20 +1,16 @@
 import { Map as ImmutableMap, fromJS } from 'immutable';
 
-import { COLUMN_ADD, COLUMN_REMOVE, COLUMN_MOVE, COLUMN_PARAMS_CHANGE } from 'flavours/glitch/actions/columns';
-import { EMOJI_USE } from 'flavours/glitch/actions/emojis';
-import { LANGUAGE_USE } from 'flavours/glitch/actions/languages';
-import { NOTIFICATIONS_FILTER_SET } from 'flavours/glitch/actions/notifications';
-import { SETTING_CHANGE, SETTING_SAVE } from 'flavours/glitch/actions/settings';
-import { STORE_HYDRATE } from 'flavours/glitch/actions/store';
-
+import { COLUMN_ADD, COLUMN_REMOVE, COLUMN_MOVE, COLUMN_PARAMS_CHANGE } from '../actions/columns';
+import { EMOJI_USE } from '../actions/emojis';
+import { LANGUAGE_USE } from '../actions/languages';
 import { LIST_DELETE_SUCCESS, LIST_FETCH_FAIL } from '../actions/lists';
+import { NOTIFICATIONS_FILTER_SET } from '../actions/notifications';
+import { SETTING_CHANGE, SETTING_SAVE } from '../actions/settings';
+import { STORE_HYDRATE } from '../actions/store';
 import { uuid } from '../uuid';
 
 const initialState = ImmutableMap({
   saved: true,
-
-  onboarded: false,
-  layout: 'auto',
 
   skinTone: 1,
 
@@ -62,8 +58,8 @@ const initialState = ImmutableMap({
       follow: true,
       follow_request: false,
       favourite: true,
-      reblog: true,
       reaction: true,
+      reblog: true,
       mention: true,
       poll: true,
       status: true,
@@ -76,8 +72,8 @@ const initialState = ImmutableMap({
       follow: true,
       follow_request: false,
       favourite: true,
-      reblog: true,
       reaction: true,
+      reblog: true,
       mention: true,
       poll: true,
       status: true,
@@ -90,15 +86,6 @@ const initialState = ImmutableMap({
       reaction: true,
       favourite: true,
       reblog: true,
-    }),
-  }),
-
-  firehose: ImmutableMap({
-    onlyMedia: false,
-    allowLocalOnly: true,
-
-    regex: ImmutableMap({
-      body: '',
     }),
   }),
 
@@ -128,6 +115,15 @@ const initialState = ImmutableMap({
     regex: ImmutableMap({
       body: '',
     }),
+  }),
+
+  dismissed_banners: ImmutableMap({
+    'public_timeline': false,
+    'community_timeline': false,
+    'home/follow-suggestions': false,
+    'explore/links': false,
+    'explore/statuses': false,
+    'explore/tags': false,
   }),
 });
 

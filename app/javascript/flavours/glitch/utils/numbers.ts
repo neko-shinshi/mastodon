@@ -1,4 +1,4 @@
-import type { ValueOf } from 'flavours/glitch/types/util';
+import type { ValueOf } from '../types/util';
 
 export const DECIMAL_UNITS = Object.freeze({
   ONE: 1,
@@ -68,4 +68,12 @@ export function pluralReady(
 
 export function roundTo10(num: number): number {
   return Math.round(num * 0.1) / 0.1;
+}
+
+export function toCappedNumber(num: string): string {
+  if (parseInt(num) > 99) {
+    return '99+';
+  } else {
+    return num;
+  }
 }
